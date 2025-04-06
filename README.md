@@ -160,3 +160,150 @@ const clickItem = (e: TreeList) => {
 }
 </style>
 ```
+
+### 动态组件
+动态组件是指在组件内部根据不同的条件渲染不同的组件。
+```vue
+// Tabs.vue
+<template>
+  <div>
+    <div class="tabs">
+      <div
+        v-for="(tab, index) in tabs"
+        :key="index"
+        class="tab-item"
+        :class="{ active: activeTab.name === tab.name }"
+        @click="activeTab = tab"
+      >
+        {{ tab.name }}
+      </div>
+    </div>
+    <component :is="activeTab.component" />
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+import HelloWorld from "./HelloWorld.vue";
+import treeVue from "./treeVue.vue";
+import card from "./card.vue";
+const tabs = [
+  {
+    name: "HelloWorld",
+    component: HelloWorld,
+  },
+  {
+    name: "treeVue",
+    component: treeVue,
+  },
+  {
+    name: "card",
+    component: card,
+  },
+];
+const activeTab = ref({
+  name: "HelloWorld",
+  component: HelloWorld,
+});
+</script>
+
+<style scoped>
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.tab-item {
+  padding: 8px 16px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+.tab-item.active {
+  background-color: #42b983;
+  color: white;
+}
+</style>
+```
+### slot插槽全家桶
+#### 基础用法
+```vue
+<!-- 父组件.vue -->
+<template>
+  <slotDemo>
+    <template>我是main</template>
+  </slotDemo>
+</template>
+
+//slotDemo.vue
+<template>
+  <div>
+    <header>我是头</header>
+    <main>
+        <slot></slot>
+    </main>
+    <footer>我是尾</footer>
+  </div>
+</template>
+```
+#### 具名插槽
+```vue
+<!-- 父组件.vue -->
+<template>
+  <slotDemo>
+    <template #header>我是头</template>
+    <template #default>我是main</template>
+    <template #footer>我是尾</template>
+  </slotDemo>
+</template>
+
+//slotDemo.vue
+<template>
+  <div>
+    <header>
+        <slot name="header"></slot>
+    </header>
+    <main>
+        <slot></slot>
+    </main>
+    <footer>
+        <slot name="footer"></slot>
+    </footer>
+  </div>
+</template>
+```
+##### 动态插槽名
+```vue
+<template>
+  <slotDemo>
+    <template #[name]>我在哪里？</template>
+  </slotDemo>
+</template>
+<script setup lang="ts">
+import { ref } from "vue";
+const name = ref("header");
+</script>
+```
+#### 作用域插槽
+```vue
+<!-- 父组件.vue -->
+<template>
+  <scopedSlotsDemo>
+    <template #default="data">
+     <p>{{ data.text }}</p>
+    </template>
+  </scopedSlotsDemo>
+</template>
+
+//scopedSlotsDemo.vue
+<template>
+  <div>
+    <slot :text="greetingMessage" :count="1"></slot>
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+const greetingMessage = ref("Hello, world!");
+</script>
+```

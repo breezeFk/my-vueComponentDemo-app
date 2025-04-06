@@ -18,12 +18,51 @@ interface TreeList {
   checked: boolean;
   children?: TreeList[];
 }
-const props = defineProps<{
-  treeData?: TreeList[];
-}>();
+withDefaults(defineProps<{ treeData?: TreeList[] }>(), {
+  treeData: [
+    {
+      name: "节点1",
+      checked: false,
+      children: [
+        {
+          name: "子节点1-1",
+          checked: true,
+          children: [
+            {
+              name: "孙节点1-1-1",
+              checked: false,
+            },
+          ],
+        },
+        {
+          name: "子节点1-2",
+          checked: false,
+        },
+      ],
+    },
+    {
+      name: "节点2",
+      checked: true,
+      children: [
+        {
+          name: "子节点2-1",
+          checked: false,
+        },
+      ],
+    },
+    {
+      name: "节点3",
+      checked: false,
+    },
+  ],
+});
+// const props = defineProps<{
+//   treeData?: TreeList[];
+// }>();
+
 const clickItem = (e: TreeList) => {
   console.log(e);
-}
+};
 </script>
 
 <style scoped>

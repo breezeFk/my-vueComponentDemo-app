@@ -1,54 +1,10 @@
 <template>
-  <div>
-    <TreeVue :treeData="exampleTreeData" >
-    </TreeVue>
-  </div>
+  <scopedSlotsDemo>
+    <template #default="data">
+     <p>{{ data.text }}</p>
+    </template>
+  </scopedSlotsDemo>
 </template>
-
 <script setup lang="ts">
-import TreeVue from "./components/treeVue.vue";
-interface TreeList {
-  name: string;
-  checked: boolean;
-  children?: TreeList[];
-}
-const exampleTreeData: TreeList[] = [
-  {
-    name: "节点1",
-    checked: false,
-    children: [
-      {
-        name: "子节点1-1",
-        checked: true,
-        children: [
-          {
-            name: "孙节点1-1-1", 
-            checked: false
-          }
-        ]
-      },
-      {
-        name: "子节点1-2",
-        checked: false
-      }
-    ]
-  },
-  {
-    name: "节点2",
-    checked: true,
-    children: [
-      {
-        name: "子节点2-1",
-        checked: false
-      }
-    ]
-  },
-  {
-    name: "节点3",
-    checked: false
-  }
-]
+import scopedSlotsDemo from "./components/scopedSlotsDemo.vue";
 </script>
-
-<style>
-</style>
